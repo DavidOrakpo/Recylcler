@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_entry"
+        android:title="Add an Entry?"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/popup_yes"
+                android:title="yes" />
+            <item
+                android:id="@+id/popup_no"
+                android:title="no" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/popup_remove"
+        android:title="Remove item?" >
+        <menu >
+            <item
+                android:id="@+id/item_remove"
+                android:title="yes" />
+            <item
+                android:id="@+id/item_remain"
+                android:title="clear the list" />
+        </menu>
+    </item>
+</menu>
