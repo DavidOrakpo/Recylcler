@@ -3,10 +3,12 @@ package com.example.recylcler;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +37,13 @@ public class NavDrawer extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activityMain_NavDrawer);
+        setContentView(R.layout.activity_main_navdrawer);
+
+        //----TOOLBAR SETUP------------
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //----FLOATING ACTION BUTTON TO MAIN ACTIVITY-----
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,18 +52,44 @@ public class NavDrawer extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        //-----DRAWER LAYOUT INITIALIZED WITH ACTION BAR TOGGLE----
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        //----NAVIGATION VIEW INITIALIZED AND ON CLICK LISTENER SETUP----
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.bottom_home:
+                        Toast.makeText(NavDrawer.this, "Home is selected", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.bottom_messages:
+                        Toast.makeText(NavDrawer.this, "Messages is selected", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.bottom_profile:
+                        Toast.makeText(NavDrawer.this, "Profile is selected", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return false;
+                }
+                
+            }
+        });
 
         initializeAdapter();
     }
 
     private void initializeAdapter(){
+
         RecyclerView recycler = findViewById(R.id.recyclerView);
         LinearLayoutManager linear_manager = new LinearLayoutManager(this);
         recycler.setLayoutManager(linear_manager);
