@@ -74,6 +74,9 @@ public class NavDrawer extends AppCompatActivity
                         return true;
                     case R.id.bottom_messages:
                         Toast.makeText(NavDrawer.this, "Messages is selected", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(NavDrawer.this,DataWorker.class);
+                        startActivity(intent);
+
                         return true;
                     case R.id.bottom_profile:
                         Toast.makeText(NavDrawer.this, "Profile is selected", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,28 @@
+When making Data bases, storage classes and constraints can be used to define the columns
+It's important to note that storage classes are optional and does not prevent any type of data
+from being stored in a particular column.
+They're five different storage classes.
+BLOB
+TEXT
+INTEGER
+REAL
+NUMERIC
+No matter what storage affinity is in a column, the column can still store a value of any type
+
+Constraints restrict allowable contents for the column.
+
+CONSTRAINTS
+    NOT NULL
+        This makes sure that a column can't be left null. The column will need a value or an error will
+        be raised
+
+    UNIQUE
+        This makes sre that no two rows have the same value for the same column. An error will be raised
+        if duplicates in a column are seen.
+    PRIMARY KEY
+        This is always of the form of the storage class INTEGER. This column is associated with
+        the integer row tag that sqlite uses internally to manage its storage.
+        This column should be named with _ID that's part of the BaseColumn interface
+PRIMARY KEY
+    This provides unambiguous row identity
+    A table can have only one primary key
