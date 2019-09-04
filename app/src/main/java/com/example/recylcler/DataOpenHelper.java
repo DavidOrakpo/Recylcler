@@ -16,8 +16,7 @@ public class DataOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(MemoryKeeperContract.ClassOne.SQL_CREATE_TABLE);
         db.execSQL(MemoryKeeperContract.ClassTwo.SQL_CREATE_TABLE);
-
-
+        //Here you pass in the sql query statement made in the Contract class for each table
     }
 
     @Override
@@ -25,12 +24,14 @@ public class DataOpenHelper extends SQLiteOpenHelper {
 
     }
     public boolean insertDataClass1(String courses, String course_id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getReadableDatabase(); //This informs sql we are writing information into the database
+        ContentValues values = new ContentValues(); //We use the class ContentValues to store column content by rows
         values.put(MemoryKeeperContract.ClassOne.COLUMN_COURSE_TITLE, courses);
         values.put(MemoryKeeperContract.ClassOne.COLUMN_COURSE_ID, course_id);
         long rowID = db.insert(MemoryKeeperContract.ClassOne.TABLE_NAME, null, values);
-        return rowID != -1;
+        //Here the values are then 'written' into the database variable, db and a new row is made
+        if (rowID != -1) return true;
+        else return false;
     }
     public boolean insertDataClass2(String noteTitle, String noteText, String courseID) {
         SQLiteDatabase db = this.getReadableDatabase();

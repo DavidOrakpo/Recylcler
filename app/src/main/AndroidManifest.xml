@@ -12,7 +12,7 @@
         <activity
             android:name=".DataWorker"
             android:label="@string/title_activity_data_worker"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/BlackTextColourActivity"></activity>
         <activity
             android:name=".NavDrawer"
             android:label="@string/title_activity_nav_drawer"
