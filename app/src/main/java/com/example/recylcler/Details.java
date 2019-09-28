@@ -6,11 +6,21 @@ import java.util.List;
 public class Details {
      private String name;
      private String occupation;
+    private String hobby;
      private static int count = 0;
 
-    public Details(String name, String occupation) {
+    public String getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
+
+    public Details(String name, String occupation, String hobby) {
         this.name = name;
         this.occupation = occupation;
+        this.hobby = hobby;
         count++;
     }
 

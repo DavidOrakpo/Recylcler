@@ -1,5 +1,6 @@
 package com.example.recylcler;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -11,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,10 @@ import org.w3c.dom.Text;
 public class DataWorker extends AppCompatActivity {
     DataOpenHelper mHelper;
     private TextView mCoursename, mCourseID, mNoteTitle, mNoteText, mNoteCourseID;
+    private Button mButton;
+    public static final String NOTE_TITLE_VALUE = "Note Title";
+    public static final String COURSE_NAME ="Course Name";
+
 
 
     @Override
@@ -34,6 +40,8 @@ public class DataWorker extends AppCompatActivity {
         mNoteTitle = findViewById(R.id.getNoteTitle);
         mNoteText = findViewById(R.id.getNoteText);
         mNoteCourseID = findViewById(R.id.noteCourseID);
+        mButton = findViewById(R.id.done_button);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +50,23 @@ public class DataWorker extends AppCompatActivity {
                 addData();
             }
         });
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                set();
+            }
+        });
+    }
+
+    private void set() {
+        Intent data = new Intent(this, NavDrawer.class);
+        data.putExtra(NOTE_TITLE_VALUE,mNoteTitle.getText().toString());
+        data.putExtra(COURSE_NAME, mCoursename.getText().toString());
+//        NavDrawer draw = new NavDrawer();
+        startActivity(data);
+
+
     }
 
     private void addData() {
@@ -54,8 +79,9 @@ public class DataWorker extends AppCompatActivity {
                 mNoteCourseID.getText().toString());
         if (row == true && row2 == true) {
             Toast.makeText(this, "Data added to database", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Data not added,error", Toast.LENGTH_SHORT).show();
+        } else if(row == false && row2 == true){
+            Toast.makeText(this, "Course Database not updated, Note database updated",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -66,5 +92,12 @@ public class DataWorker extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHelper = new DataOpenHelper(DataWorker.this);
+        mHelper.close();
+        super.onDestroy();
     }
 }

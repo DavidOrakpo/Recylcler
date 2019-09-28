@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataOpenHelper extends SQLiteOpenHelper {
+    // We set the Database name and version here and pass it into the super constructor
     public static final String DATABASE_NAME = "Test.db";
     public static final int DATABASE_VERSION = 1;
     public DataOpenHelper(Context context) {

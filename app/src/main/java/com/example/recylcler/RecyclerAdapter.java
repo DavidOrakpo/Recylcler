@@ -54,6 +54,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Vholde
         Details deets = listRecyc.get(position);
         holder.mNoteTitle.setText(deets.getName());
         holder.mNoteCourses.setText(deets.getOccupation());
+        holder.mNumCount.setText(deets.getHobby());
+
         holder.currentPosition = position;
 
 //        holder.mNumCount.setText(holder.currentPosition);

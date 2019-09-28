@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         LinearLayoutManager linear_manager = new LinearLayoutManager(this);
         recycler.setLayoutManager(linear_manager);
         //-----DATA TO POPULATE THE LAYOUT MANAGER IS OBTAINED FROM DATA CLASS------------
-        recycList = listGenerator(5);
+        recycList = listGenerator(0);
 
 
         //----NEW INSTANCE OF ADAPTER CLASS IS CREATED AND THE CONTEXT AND DATA LIST IS PASSED INTO IT
@@ -88,9 +88,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public List<Details> listGenerator(int loopcount){
         List<Details> details = new ArrayList<>();
         for(int i = 0; i<loopcount;i++){
-            details.add(new Details("John","Teacher"));
-            details.add(new Details("James","Banker"));
-            details.add(new Details("Peter","Farmer"));
+            details.add(new Details("John","Teacher","biking"));
+            ;
 
         }
         return details;
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 //        name = name_entry.getText().toString();
 //        occupation = name_occupation.getText().toString();
         if(!Objects.equals(name, "") && !Objects.equals(occupation, "")) {
-            recycList.add(new Details(name, occupation));
+            recycList.add(new Details(name, occupation,"biking"));
             name_entry.setText("");
             name_occupation.setText("");
             title_name.setVisibility(View.INVISIBLE);

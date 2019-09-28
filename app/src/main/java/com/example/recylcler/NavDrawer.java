@@ -1,6 +1,8 @@
 package com.example.recylcler;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,11 +31,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.recylcler.MemoryKeeperContract.*;
+
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private  List<Details> recycList;
     private RecyclerAdapter adapter;
+    private DataOpenHelper mHelper = new DataOpenHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +54,7 @@ public class NavDrawer extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NavDrawer.this,MainActivity.class);
+                Intent intent = new Intent(NavDrawer.this,DataWorker.class);
                 startActivity(intent);
             }
         });
@@ -71,6 +77,8 @@ public class NavDrawer extends AppCompatActivity
                 switch (menuItem.getItemId()){
                     case R.id.bottom_home:
                         Toast.makeText(NavDrawer.this, "Home is selected", Toast.LENGTH_SHORT).show();
+                        Intent main = new Intent(NavDrawer.this, MainActivity.class);
+                        startActivity(main);
                         return true;
                     case R.id.bottom_messages:
                         Toast.makeText(NavDrawer.this, "Messages is selected", Toast.LENGTH_SHORT).show();
@@ -87,33 +95,88 @@ public class NavDrawer extends AppCompatActivity
                 
             }
         });
-
-        initializeAdapter();
-    }
-
-    private void initializeAdapter(){
-
         RecyclerView recycler = findViewById(R.id.recyclerView);
         LinearLayoutManager linear_manager = new LinearLayoutManager(this);
         recycler.setLayoutManager(linear_manager);
-        //-----DATA TO POPULATE THE LAYOUT MANAGER IS OBTAINED FROM DATA CLASS------------
-        recycList = listGenerator(5);
+        initializeAdapter();
 
+    }
 
+    private void initializeAdapter(){
         //----NEW INSTANCE OF ADAPTER CLASS IS CREATED AND THE CONTEXT AND DATA LIST IS PASSED INTO IT
-        adapter = new RecyclerAdapter(this, recycList);
-        recycler.setAdapter(adapter);
+        Intent intent = this.getIntent();
+        RecyclerView recycler = findViewById(R.id.recyclerView);
+        if (intent != null) {
+            recycList = new ArrayList<>();
+            readnotes(mHelper);
+            adapter = new RecyclerAdapter(this, recycList);
+            recycler.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        }
+        else{
+            recycList = listGenerator(0);
+            adapter = new RecyclerAdapter(this, recycList);
+            recycler.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     public List<Details> listGenerator(int loopcount){
         List<Details> details = new ArrayList<>();
         for(int i = 0; i<loopcount;i++){
-            details.add(new Details("John","Teacher"));
-            details.add(new Details("James","Banker"));
-            details.add(new Details("Peter","Farmer"));
-
+            details.add(new Details("John","Teacher","biking"));
         }
         return details;
+    }
+
+    public void readcourses(DataOpenHelper dbhelper) {
+        SQLiteDatabase db = dbhelper.getReadableDatabase();
+        String[] columnsList1 = {
+                ClassOne.COLUMN_COURSE_TITLE,
+                ClassOne.COLUMN_COURSE_ID};
+        final Cursor course_cursor = db.query(ClassOne.TABLE_NAME, columnsList1,
+                null, null,
+                null, null, null, null);
+        loadCoursefromdatabase(course_cursor);
+    }
+
+    public void readnotes(DataOpenHelper dbhelper) {
+        SQLiteDatabase db = dbhelper.getReadableDatabase();
+        String[] columnsList2 = {
+                ClassTwo.COLUMN_NOTE_TEXT,
+                ClassTwo.COLUMN_NOTE_TITLE,
+                ClassTwo.COLUMN_COURSE_ID};
+        final Cursor note_cursor = db.query(ClassTwo.TABLE_NAME,
+                columnsList2,
+                null,null,null,null,null);
+        loadNotesFromDatabase(note_cursor);
+    }
+
+    public void loadCoursefromdatabase(Cursor cursor) {
+        //First, you'd need to use the get column index value to avoid hard coding the column's index
+        int courseTitleIndex = cursor.getColumnIndex(ClassOne.COLUMN_COURSE_TITLE);
+        int courseIDIndex = cursor.getColumnIndex(ClassOne.COLUMN_COURSE_ID);
+        while (cursor.moveToNext()) {
+            String courseTitle = cursor.getString(courseTitleIndex);
+            String courseID = cursor.getString(courseIDIndex);
+//            recycList.add(new Details(courseTitle, courseID));
+        }
+        cursor.close();
+    }
+
+    public void loadNotesFromDatabase(Cursor cursor) {
+        int NoteTextIndex = cursor.getColumnIndex(ClassTwo.COLUMN_NOTE_TEXT);
+        int NoteTitleIndex = cursor.getColumnIndex(ClassTwo.COLUMN_NOTE_TITLE);
+        int NoteIDIndex = cursor.getColumnIndex(ClassTwo.COLUMN_COURSE_ID);
+        while (cursor.moveToNext()) {
+            String noteText = cursor.getString(NoteTextIndex);
+            String noteTItle = cursor.getString(NoteTitleIndex);
+            String noteID = cursor.getString(NoteIDIndex);
+            recycList.add(new Details(noteText, noteTItle, noteID));
+        }
+        cursor.close();
     }
 
     @Override
